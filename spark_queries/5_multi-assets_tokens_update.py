@@ -22,6 +22,11 @@ from pyspark.sql.types import StructType, StringType, IntegerType, ArrayType,Boo
 import pyspark
 import pandas as pd
 from pyspark.sql import SparkSession
+# import the builtin time module
+import time
+
+# Grab Currrent Time Before Running the Code
+start = time.time()
 
 client = MongoClient("172.23.149.210", 27017)
 db = client['cardano_bronze']
@@ -288,7 +293,7 @@ tokens_by_supply_without_1 = "select query_token_types_final.total_supply token_
         group by query_token_types_final.total_supply \
         order by query_token_types_final.total_supply"
 
-result_2 = spark.sql(tokens_by_supply)
+result_2 = spark.sql(tokens_by_supply_without_1)
 
 ## Write in the GOLD db, collection smart_contract_calls
 result_2.write.format("mongodb") \
@@ -376,3 +381,10 @@ last_ind.update_one(multi_assets_query, new_multi_assets_count)
 last_ind.update_one(tx_query, new_tx_count)
 last_ind.update_one(ma_tx_mint_query, new_ma_tx_mint_count)
 last_ind.update_one(tx_metadata_query, new_tx_metadata_count)
+
+# Grab Currrent Time After Running the Code
+end = time.time()
+
+#Subtract Start Time from The End Time
+total_time = end - start
+print("\n"+ str(total_time))

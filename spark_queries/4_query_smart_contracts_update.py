@@ -24,6 +24,13 @@ import pandas as pd
 from pyspark.sql import SparkSession
 
 # %%
+# import the builtin time module
+import time
+
+# Grab Currrent Time Before Running the Code
+start = time.time()
+
+# %%
 client = MongoClient("172.23.149.210", 27017)
 db = client['cardano_bronze']
 
@@ -42,6 +49,7 @@ redeemer_tmp = db["redeemer_temporary"]
 tx_in_tmp = db["tx_in_temporary"]
 tx_out_tmp = db["tx_out_temporary"]
 block_tmp = db["block_temporary"]
+test_table = db["test_table"]
 
 # %%
 # insert initial values in checkpoint table
@@ -107,10 +115,10 @@ block_tmp.insert_many(block_df)
 # save Spark temporary files into folder /home/ubuntu/notebook/tmp_spark_files, with more space
 config = pyspark.SparkConf().setAll([
     #('spark.driver.extraJavaOptions', '-Djava.io.tmpdir=/home/ubuntu/notebook/tmp_spark_env'),
-    ('spark.executor.memory', '30g'),
-    ('spark.executor.cores', '3'),
-    ('spark.cores.max', '3'),
-    ('spark.driver.memory','10g'),
+    ('spark.executor.memory', '40g'),
+    ('spark.executor.cores', '6'),
+    ('spark.cores.max', '6'),
+    ('spark.driver.memory','8g'),
     ('spark.executor.instances', '2'),
     ('spark.worker.cleanup.enabled', 'true'),
     ('spark.worker.cleanup.interval', '60'),
@@ -138,17 +146,11 @@ spark = SparkSession \
 # - tx_in
 # - tx_out
 
-# %% [raw]
-# #### READ FROM CSV AS TEST - need to load redeemer table from mongoDB
-# tx = spark.read.json("/home/ubuntu/mock_data/shared_data/tx_10k.json")
-# tx_in = spark.read.json("/home/ubuntu/mock_data/shared_data/tx_in_10k.json")
-# tx_out = spark.read.json("/home/ubuntu/mock_data/shared_data/tx_out_10k.json")
-
 # %%
 tx = spark.read.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
   	.option('spark.mongodb.database', 'cardano_bronze') \
-  	.option('spark.mongodb.collection', 'tx_temporary') \
+  	.option('spark.mongodb.collection', 'node.public.tx') \
 	.option('spark.mongodb.read.readPreference.name', 'primaryPreferred') \
 	.option('spark.mongodb.change.stream.publish.full.document.only','true') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
@@ -158,7 +160,7 @@ tx = spark.read.format("mongodb") \
 redeemer = spark.read.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
   	.option('spark.mongodb.database', 'cardano_bronze') \
-  	.option('spark.mongodb.collection', 'redeemer_temporary') \
+  	.option('spark.mongodb.collection', 'node.public.redeemer') \
 	.option('spark.mongodb.read.readPreference.name', 'primaryPreferred') \
 	.option('spark.mongodb.change.stream.publish.full.document.only','true') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
@@ -168,7 +170,7 @@ redeemer = spark.read.format("mongodb") \
 tx_in = spark.read.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
   	.option('spark.mongodb.database', 'cardano_bronze') \
-  	.option('spark.mongodb.collection', 'tx_in_temporary') \
+  	.option('spark.mongodb.collection', 'node.public.tx_in') \
 	.option('spark.mongodb.read.readPreference.name', 'primaryPreferred') \
 	.option('spark.mongodb.change.stream.publish.full.document.only','true') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
@@ -178,7 +180,7 @@ tx_in = spark.read.format("mongodb") \
 tx_out = spark.read.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
   	.option('spark.mongodb.database', 'cardano_bronze') \
-  	.option('spark.mongodb.collection', 'tx_out_temporary') \
+  	.option('spark.mongodb.collection', 'node.public.tx_out') \
 	.option('spark.mongodb.read.readPreference.name', 'primaryPreferred') \
 	.option('spark.mongodb.change.stream.publish.full.document.only','true') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
@@ -188,7 +190,7 @@ tx_out = spark.read.format("mongodb") \
 block = spark.read.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
   	.option('spark.mongodb.database', 'cardano_bronze') \
-  	.option('spark.mongodb.collection', 'block_temporary') \
+  	.option('spark.mongodb.collection', 'node.public.block') \
 	.option('spark.mongodb.read.readPreference.name', 'primaryPreferred') \
 	.option('spark.mongodb.change.stream.publish.full.document.only','true') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
@@ -234,11 +236,35 @@ SC_result = spark.sql(query_smart_contracts)
 ## Write in the GOLD db, collection smart_contract_calls
 SC_result.write.format("mongodb") \
 	.option('spark.mongodb.connection.uri', 'mongodb://172.23.149.210:27017') \
-  	.mode("append") \
+  	.mode("overwrite") \
     .option('spark.mongodb.database', 'cardano_silver') \
   	.option('spark.mongodb.collection', 'smart_contract_info') \
   	.option("forceDeleteTempCheckpointLocation", "true") \
   	.save()
+
+# %%
+# update the old checkpoints with new ones, based on current document count
+# TODO: this checkpoint save step has to be done AFTER the new records have been added in the network table
+tx_query = { "collection": "tx" }
+new_tx_count = { "$set": { "last_index": count_tx } }
+
+tx_in_query = { "collection": "tx_in" }
+new_tx_in_count = { "$set": { "last_index": count_tx_in } }
+
+tx_out_query = { "collection": "tx_out" }
+new_tx_out_count = { "$set": { "last_index": count_tx_out } }
+
+redeemer_query = { "collection": "redeemer" }
+new_redeemer_count = { "$set": { "last_index": count_redeemer } }
+
+block_query = { "collection": "block" }
+new_block_count = { "$set": { "last_index": count_block } }
+
+last_ind.update_one(tx_query, new_tx_count)
+last_ind.update_one(tx_in_query, new_tx_in_count)
+last_ind.update_one(tx_out_query, new_tx_out_count)
+last_ind.update_one(redeemer_query, new_redeemer_count)
+last_ind.update_one(block_query, new_block_count)
 
 # %%
 ### EXECUTE THE SECONDARY QUERIES ON THE FULL TABLES
@@ -330,25 +356,8 @@ sc_by_date_result.write.format("mongodb") \
 spark.stop()
 
 # %%
-# update the old checkpoints with new ones, based on current document count
-# TODO: this checkpoint save step has to be done AFTER the new records have been added in the network table
-tx_query = { "collection": "tx" }
-new_tx_count = { "$set": { "last_index": count_tx } }
+# Grab Currrent Time After Running the Code
+end = time.time()
 
-tx_in_query = { "collection": "tx_in" }
-new_tx_in_count = { "$set": { "last_index": count_tx_in } }
-
-tx_out_query = { "collection": "tx_out" }
-new_tx_out_count = { "$set": { "last_index": count_tx_out } }
-
-redeemer_query = { "collection": "redeemer" }
-new_redeemer_count = { "$set": { "last_index": count_redeemer } }
-
-block_query = { "collection": "block" }
-new_block_count = { "$set": { "last_index": count_block } }
-
-last_ind.update_one(tx_query, new_tx_count)
-last_ind.update_one(tx_in_query, new_tx_in_count)
-last_ind.update_one(tx_out_query, new_tx_out_count)
-last_ind.update_one(redeemer_query, new_redeemer_count)
-last_ind.update_one(block_query, new_block_count)
+#Subtract Start Time from The End Time
+total_time = end - start

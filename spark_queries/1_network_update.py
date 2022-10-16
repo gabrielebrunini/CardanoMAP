@@ -8,6 +8,11 @@ from pyspark.sql.types import StructType, StringType, IntegerType, ArrayType,Boo
 import pyspark
 import pandas as pd
 from pyspark.sql import SparkSession
+# import the builtin time module
+import time
+
+# Grab Currrent Time Before Running the Code
+start = time.time()
 
 
 client = MongoClient("172.23.149.210", 27017)
@@ -172,4 +177,10 @@ last_ind.update_one(tx_out_query, new_tx_out_count)
 
 spark.stop()
 
+# Grab Currrent Time After Running the Code
+end = time.time()
+
+#Subtract Start Time from The End Time
+total_time = end - start
+print("\n"+ str(total_time))
 
