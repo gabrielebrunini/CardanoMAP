@@ -25,4 +25,4 @@
 0 1-23/3 * * * cd /home/ubuntu/notebook/spark_queries && time /usr/bin/python3 5_multi-assets_tokens_update.py 2>&1 | tee output5.txt
 0 2-23/3 * * * cd /home/ubuntu/notebook/spark_queries && time /usr/bin/python3 4_query_smart_contracts_update.py 2>&1 | tee output4.txt
 0 0 */5 * * cd /home/ubuntu/notebook/spark_queries && time /usr/bin/python3 2_query_rewards_history_update.py 2>&1 | tee output2.txt
-0 3 */5 * * cd /home/ubuntu/CardanoMAP/spark_queries && time /usr/bin/python3 3_query_account_balances_final.py 2>&1 | tee output3.txt
+0 3-23 * * * cd /home/ubuntu/CardanoMAP/spark_queries && time /usr/bin/python3 3_query_account_balances_final.py 2>&1 | tee output3.txt
