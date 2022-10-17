@@ -1,4 +1,4 @@
-# Design and Implementation of a Blockchain Observatory for Cardanp
+# Design and Implementation of a Blockchain Observatory for Cardano
 
 Standards and cross-chain interoperability are currently missing in blockchain technology. 
 Blockchain data analysis is more challenging as a result of this issue. 
