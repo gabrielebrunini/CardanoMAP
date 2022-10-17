@@ -39,7 +39,6 @@ tx = db["node.public.tx"]
 redeemer = db["node.public.redeemer"]
 tx_in = db["node.public.tx_in"]
 tx_out = db["node.public.tx_out"]
-block = db["node.public.block"]
 
 last_ind = db["last_indexes_4_smart_contracts"]
 
@@ -48,8 +47,6 @@ tx_tmp = db["tx_temporary"]
 redeemer_tmp = db["redeemer_temporary"]
 tx_in_tmp = db["tx_in_temporary"]
 tx_out_tmp = db["tx_out_temporary"]
-block_tmp = db["block_temporary"]
-test_table = db["test_table"]
 
 # %%
 # insert initial values in checkpoint table
@@ -71,7 +68,6 @@ tx_last_processed = last_ind.find_one({'collection': 'tx'})['last_index']
 redeemer_last_processed = last_ind.find_one({'collection': 'redeemer'})['last_index']
 tx_in_last_processed = last_ind.find_one({'collection': 'tx_in'})['last_index']
 tx_out_last_processed = last_ind.find_one({'collection': 'tx_out'})['last_index']
-block_last_processed = last_ind.find_one({'collection': 'block'})['last_index']
 
 # %%
 # count how many documents are in each new input mongodb collection
@@ -79,7 +75,6 @@ count_tx = tx.estimated_document_count()
 count_redeemer = redeemer.estimated_document_count()
 count_tx_in = tx_in.estimated_document_count()
 count_tx_out = tx_out.estimated_document_count()
-count_block = block.estimated_document_count()
 
 # %%
 #tx_df = tx.find()[0:1000]
@@ -93,7 +88,6 @@ tx_df = tx.find()[tx_last_processed:count_tx]
 redeemer_df = redeemer.find()[redeemer_last_processed:count_redeemer]
 tx_in_df = tx_in.find()[tx_in_last_processed:count_tx_in]
 tx_out_df = tx_out.find()[tx_out_last_processed:count_tx_out]
-block_df = block.find()[block_last_processed:count_block]
 
 # %%
 # drop the previous records in the temporary collections
@@ -101,7 +95,6 @@ tx_tmp.drop()
 redeemer_tmp.drop()
 tx_in_tmp.drop()
 tx_out_tmp.drop()
-block_tmp.drop()
 
 # %%
 # load the temporary records in the temporary collections
@@ -109,7 +102,6 @@ tx_tmp.insert_many(tx_df)
 redeemer_tmp.insert_many(redeemer_df)
 tx_in_tmp.insert_many(tx_in_df)
 tx_out_tmp.insert_many(tx_out_df)
-block_tmp.insert_many(block_df)
 
 # %%
 # save Spark temporary files into folder /home/ubuntu/notebook/tmp_spark_files, with more space
@@ -257,14 +249,13 @@ new_tx_out_count = { "$set": { "last_index": count_tx_out } }
 redeemer_query = { "collection": "redeemer" }
 new_redeemer_count = { "$set": { "last_index": count_redeemer } }
 
-block_query = { "collection": "block" }
-new_block_count = { "$set": { "last_index": count_block } }
+#block_query = { "collection": "block" }
+#new_block_count = { "$set": { "last_index": count_block } }
 
 last_ind.update_one(tx_query, new_tx_count)
 last_ind.update_one(tx_in_query, new_tx_in_count)
 last_ind.update_one(tx_out_query, new_tx_out_count)
 last_ind.update_one(redeemer_query, new_redeemer_count)
-last_ind.update_one(block_query, new_block_count)
 
 # %%
 ### EXECUTE THE SECONDARY QUERIES ON THE FULL TABLES
