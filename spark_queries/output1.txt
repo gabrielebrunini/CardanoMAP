@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "1_network_update.py", line 55, in <module>
+    tx_tmp.insert_many(tx_df)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/_csot.py", line 105, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/collection.py", line 707, in insert_many
+    blk.execute(write_concern, session=session)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/bulk.py", line 496, in execute
+    raise InvalidOperation("No operations to execute")
+pymongo.errors.InvalidOperation: No operations to execute
+Command exited with non-zero status 1
+1.22user 3.66system 0:07.70elapsed 63%CPU (0avgtext+0avgdata 82796maxresident)k
+47736inputs+0outputs (81major+23880minor)pagefaults 0swaps

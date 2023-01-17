@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "2_query_rewards_history_update.py", line 73, in <module>
+    reward_tmp.insert_many(reward_df)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/_csot.py", line 105, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/collection.py", line 707, in insert_many
+    blk.execute(write_concern, session=session)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/bulk.py", line 496, in execute
+    raise InvalidOperation("No operations to execute")
+pymongo.errors.InvalidOperation: No operations to execute
+Command exited with non-zero status 1
+0.88user 1.94system 0:01.20elapsed 235%CPU (0avgtext+0avgdata 82880maxresident)k
+24inputs+0outputs (0major+24126minor)pagefaults 0swaps

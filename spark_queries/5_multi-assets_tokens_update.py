@@ -77,11 +77,11 @@ count_block = block.estimated_document_count()
 count_tx_metadata = tx_metadata.estimated_document_count()
 
 # for each Cardano table, select the records which haven't been processed yet (range between last_processed and total records count)
-multi_assets_df = multi_assets.find()[multi_assets_last_processed:count_multi_assets]
-tx_df = tx.find()[tx_last_processed:count_tx]
-ma_tx_mint_df = ma_tx_mint.find()[ma_tx_mint_last_processed:count_ma_tx_mint]
-block_df = block.find()[block_last_processed:count_block]
-tx_metadata_df = tx_metadata.find()[tx_metadata_last_processed:count_tx_metadata]
+multi_assets_df = multi_assets.find()[count_multi_assets-10000:count_multi_assets]
+tx_df = tx.find()[count_tx-10000:count_tx]
+ma_tx_mint_df = ma_tx_mint.find()[count_ma_tx_mint-10000:count_ma_tx_mint]
+block_df = block.find()[count_block-10000:count_block]
+tx_metadata_df = tx_metadata.find()[count_tx_metadata-10000:count_tx_metadata]
 
 # drop the previous records in the temporary collections
 multi_assets_tmp.drop()
@@ -96,26 +96,6 @@ tx_last_processed = last_ind.find_one({'collection': 'tx'})['last_index']
 ma_tx_mint_last_processed = last_ind.find_one({'collection': 'ma_tx_mint'})['last_index']
 block_last_processed = last_ind.find_one({'collection': 'block'})['last_index']
 tx_metadata_last_processed = last_ind.find_one({'collection': 'tx_metadata'})['last_index']
-
-# count how many documents are in each new input mongodb collection
-count_multi_assets = multi_assets.estimated_document_count()
-count_tx = tx.estimated_document_count()
-count_ma_tx_mint = ma_tx_mint.estimated_document_count()
-count_block = block.estimated_document_count()
-count_tx_metadata = tx_metadata.estimated_document_count()
-
-# for each Cardano table, select the records which haven't been processed yet (range between last_processed and total records count)
-multi_assets_df = multi_assets.find()[multi_assets_last_processed:count_multi_assets]
-tx_df = tx.find()[tx_last_processed:count_tx]
-ma_tx_mint_df = ma_tx_mint.find()[ma_tx_mint_last_processed:count_ma_tx_mint]
-block_df = block.find()[block_last_processed:count_block]
-
-# drop the previous records in the temporary collections
-multi_assets_tmp.drop()
-tx_tmp.drop()
-ma_tx_mint_tmp.drop()
-block_tmp.drop()
-tx_metadata_tmp.drop()
 
 # load the temporary records in the temporary collections
 multi_assets_tmp.insert_many(multi_assets_df)
@@ -388,3 +368,6 @@ end = time.time()
 #Subtract Start Time from The End Time
 total_time = end - start
 print("\n"+ str(total_time))
+# -
+
+

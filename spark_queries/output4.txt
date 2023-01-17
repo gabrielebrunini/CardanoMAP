@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "4_query_smart_contracts_update.py", line 101, in <module>
+    tx_tmp.insert_many(tx_df)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/_csot.py", line 105, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/collection.py", line 707, in insert_many
+    blk.execute(write_concern, session=session)
+  File "/home/ubuntu/.local/lib/python3.7/site-packages/pymongo/bulk.py", line 496, in execute
+    raise InvalidOperation("No operations to execute")
+pymongo.errors.InvalidOperation: No operations to execute
+Command exited with non-zero status 1
+1.19user 3.52system 0:01.12elapsed 420%CPU (0avgtext+0avgdata 82728maxresident)k
+0inputs+0outputs (0major+24132minor)pagefaults 0swaps

@@ -42,9 +42,9 @@ count_tx_in = tx_in.estimated_document_count()
 count_tx_out = tx_out.estimated_document_count()
 
 # for each Cardano table, select the records which haven't been processed yet (range between last_processed and total records count)
-tx_df = tx.find()[tx_last_processed:count_tx]
-tx_in_df = tx_in.find()[tx_in_last_processed:count_tx_in]
-tx_out_df = tx_out.find()[tx_out_last_processed:count_tx_out]
+tx_df = tx.find()[count_tx:count_tx]
+tx_in_df = tx_in.find()[count_tx_in:count_tx_in]
+tx_out_df = tx_out.find()[count_tx_out:count_tx_out]
 
 # drop the previous records in the temporary collections
 tx_tmp.drop()

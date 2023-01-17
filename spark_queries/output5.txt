@@ -1,0 +1,48 @@
+23/01/17 22:10:39 WARN Utils: Your hostname, cardano-druid resolves to a loopback address: 127.0.0.1; using 172.23.149.210 instead (on interface ens3)
+23/01/17 22:10:39 WARN Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by org.apache.spark.unsafe.Platform (file:/home/ubuntu/.local/lib/python3.7/site-packages/pyspark/jars/spark-unsafe_2.12-3.2.1.jar) to constructor java.nio.DirectByteBuffer(long,int)
+WARNING: Please consider reporting this to the maintainers of org.apache.spark.unsafe.Platform
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+:: loading settings :: url = jar:file:/home/ubuntu/.local/lib/python3.7/site-packages/pyspark/jars/ivy-2.5.0.jar!/org/apache/ivy/core/settings/ivysettings.xml
+Ivy Default Cache set to: /home/ubuntu/.ivy2/cache
+The jars for the packages stored in: /home/ubuntu/.ivy2/jars
+org.mongodb.spark#mongo-spark-connector added as a dependency
+:: resolving dependencies :: org.apache.spark#spark-submit-parent-27722378-6588-4434-9b45-31c490e0527b;1.0
+	confs: [default]
+	found org.mongodb.spark#mongo-spark-connector;10.0.2 in central
+	found org.mongodb#mongodb-driver-sync;4.5.1 in central
+	[4.5.1] org.mongodb#mongodb-driver-sync;[4.5.0,4.5.99)
+	found org.mongodb#bson;4.5.1 in central
+	found org.mongodb#mongodb-driver-core;4.5.1 in central
+:: resolution report :: resolve 3614ms :: artifacts dl 5ms
+	:: modules in use:
+	org.mongodb#bson;4.5.1 from central in [default]
+	org.mongodb#mongodb-driver-core;4.5.1 from central in [default]
+	org.mongodb#mongodb-driver-sync;4.5.1 from central in [default]
+	org.mongodb.spark#mongo-spark-connector;10.0.2 from central in [default]
+	---------------------------------------------------------------------
+	|                  |            modules            ||   artifacts   |
+	|       conf       | number| search|dwnlded|evicted|| number|dwnlded|
+	---------------------------------------------------------------------
+	|      default     |   4   |   1   |   0   |   0   ||   4   |   0   |
+	---------------------------------------------------------------------
+:: retrieving :: org.apache.spark#spark-submit-parent-27722378-6588-4434-9b45-31c490e0527b
+	confs: [default]
+	0 artifacts copied, 4 already retrieved (0kB/4ms)
+23/01/17 22:10:44 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark's default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to "WARN".
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+23/01/17 22:10:48 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+23/01/17 22:10:55 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 0:>                                                          (0 + 0) / 1][Stage 0:>                                                          (0 + 1) / 1]                                                                                23/01/17 22:11:15 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 1:>                                                         (0 + 6) / 31][Stage 1:=>                                                        (1 + 6) / 31][Stage 1:===>                                                      (2 + 6) / 31][Stage 1:=====>                                                    (3 + 6) / 31][Stage 1:=========>                                                (5 + 6) / 31][Stage 1:===========>                                              (6 + 6) / 31][Stage 1:==============>                                           (8 + 6) / 31][Stage 1:==================>                                      (10 + 6) / 31][Stage 1:======================>                                  (12 + 6) / 31][Stage 1:=======================>                                 (13 + 6) / 31][Stage 1:=========================>                               (14 + 6) / 31][Stage 1:===========================>                             (15 + 6) / 31][Stage 1:=============================>                           (16 + 6) / 31][Stage 1:=================================>                       (18 + 6) / 31][Stage 1:==================================>                      (19 + 6) / 31][Stage 1:======================================>                  (21 + 6) / 31][Stage 1:========================================>                (22 + 6) / 31][Stage 1:==========================================>              (23 + 6) / 31][Stage 1:============================================>            (24 + 6) / 31][Stage 1:===============================================>         (26 + 5) / 31][Stage 1:=================================================>       (27 + 4) / 31][Stage 1:===================================================>     (28 + 3) / 31][Stage 3:>                                                          (0 + 1) / 1]                                                                                23/01/17 22:11:33 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 4:>                                                          (0 + 1) / 1]                                                                                23/01/17 22:11:46 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 5:>                                                         (0 + 6) / 29][Stage 5:==>                                                       (1 + 6) / 29][Stage 5:========>                                                 (4 + 6) / 29][Stage 5:==========>                                               (5 + 6) / 29][Stage 5:============>                                             (6 + 6) / 29][Stage 5:==============>                                           (7 + 6) / 29][Stage 5:================>                                         (8 + 6) / 29][Stage 5:=====================>                                   (11 + 6) / 29][Stage 5:=======================>                                 (12 + 6) / 29][Stage 5:=========================>                               (13 + 6) / 29][Stage 5:=============================>                           (15 + 6) / 29][Stage 5:===============================>                         (16 + 6) / 29][Stage 5:=================================>                       (17 + 6) / 29][Stage 5:=====================================>                   (19 + 6) / 29][Stage 5:=======================================>                 (20 + 6) / 29][Stage 5:=========================================>               (21 + 6) / 29][Stage 5:===========================================>             (22 + 6) / 29][Stage 5:===============================================>         (24 + 5) / 29][Stage 5:===================================================>     (26 + 3) / 29][Stage 5:=======================================================> (28 + 1) / 29]                                                                                23/01/17 22:12:24 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 13:>                                                        (0 + 6) / 29][Stage 13:===>                                                     (2 + 6) / 29][Stage 13:=======>                                                 (4 + 6) / 29][Stage 13:=========>                                               (5 + 6) / 29][Stage 13:=============>                                           (7 + 6) / 29][Stage 13:=================>                                       (9 + 6) / 29][Stage 13:=====================>                                  (11 + 6) / 29][Stage 13:=========================>                              (13 + 6) / 29][Stage 13:===========================>                            (14 + 6) / 29][Stage 13:==============================>                         (16 + 6) / 29][Stage 13:==================================>                     (18 + 6) / 29][Stage 13:======================================>                 (20 + 6) / 29][Stage 13:========================================>               (21 + 6) / 29][Stage 13:==========================================>             (22 + 6) / 29][Stage 13:================================================>       (25 + 4) / 29][Stage 13:==================================================>     (26 + 3) / 29][Stage 13:======================================================> (28 + 1) / 29]                                                                                23/01/17 22:12:53 WARN CaseInsensitiveStringMap: Converting duplicated key forcedeletetempcheckpointlocation into CaseInsensitiveStringMap.
+[Stage 16:===================>                                      (1 + 2) / 3][Stage 16:======================================>                   (2 + 1) / 3]                                                                                
+793.745096206665
+2.21user 3.61system 13:14.97elapsed 0%CPU (0avgtext+0avgdata 125016maxresident)k
+3536inputs+8outputs (34major+58306minor)pagefaults 0swaps
